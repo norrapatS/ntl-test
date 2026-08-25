@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import AppHeader from '@/components/site/AppHeader.vue'
 </script>
 
 <template>
-  <div class="bg-navy text-white p-4">Tailwind works</div>
+  <AppHeader />
+  <RouterView />
 </template>
