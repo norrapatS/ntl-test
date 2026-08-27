@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 import AuthCard from '@/components/auth/AuthCard.vue'
-import AuthInput from '@/components/auth/AuthInput.vue'
+import TextInputFormField from '@/components/TextInputFormField.vue'
 
 const router = useRouter()
 
@@ -35,7 +35,7 @@ const onSubmit = () => {
       class="space-y-5"
       @submit.prevent="onSubmit"
     >
-      <AuthInput
+      <TextInputFormField
         id="email"
         v-model="form.email"
         label="อีเมล"
@@ -43,7 +43,7 @@ const onSubmit = () => {
         placeholder="you@example.com"
       />
 
-      <AuthInput
+      <TextInputFormField
         id="password"
         v-model="form.password"
         label="รหัสผ่าน"

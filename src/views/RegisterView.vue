@@ -1,132 +1,105 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-
-import AuthInput from '@/components/auth/AuthInput.vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import TextNumberInputFormField from '@/components/TextNumberInputFormField.vue'
+import TextInputFormField from '@/components/TextInputFormField.vue'
+import { registerSchema } from '@/validations/auth/register.schema'
 
 const router = useRouter()
 
-const form = reactive({
-  email: '',
-  phone: '',
-  password: '',
-  confirm: '',
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: toTypedSchema(registerSchema),
+  initialValues: {
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    agree: false,
+  },
 })
 
-const agree = ref(false)
-const error = ref('')
-const success = ref('')
+const [email, emailAttrs] = defineField('email')
+const [phone, phoneAttrs] = defineField('phone')
+const [password, passwordAttrs] = defineField('password')
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword')
 
-const onSubmit = () => {
-  error.value = ''
-  success.value = ''
+const [agree, agreeAttrs] = defineField('agree')
 
-  if (!form.email || !form.phone || !form.password) {
-    error.value = 'กรุณากรอกข้อมูลให้ครบถ้วน'
-    return
-  }
-
-  if (form.password !== form.confirm) {
-    error.value = 'รหัสผ่านไม่ตรงกัน'
-    return
-  }
-
-  if (!agree.value) {
-    error.value = 'กรุณายอมรับเงื่อนไขการให้ข้อมูล'
-    return
-  }
-
-  success.value = 'สมัครสมาชิกสำเร็จ เริ่มกรอกแบบฟอร์มได้เลย'
-
+const onSubmit = handleSubmit((values) => {
   router.push({
     path: '/apply',
     query: {
-      email: form.email,
-      phone: form.phone,
+      email: values.email,
+      phone: values.phone,
     },
   })
-}
+})
 </script>
 
 <template>
   <main class="min-h-screen bg-background px-5 py-14 text-foreground">
     <div class="mx-auto max-w-lg">
-      <p
-        class="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-      >
-        ขั้นที่ 1
-      </p>
+      <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">ขั้นที่ 1</p>
 
-      <h1 class="mt-2 text-3xl font-bold">
-        สมัครสมาชิก
-      </h1>
+      <h1 class="mt-2 text-3xl font-bold">สมัครสมาชิก</h1>
 
       <p class="mt-2 text-sm text-muted-foreground">
         ใช้อีเมลและเบอร์โทรศัพท์เพื่อรับการแจ้งผลการพิจารณา
       </p>
 
-      <form
-        class="surface-card mt-8 space-y-5 p-6"
-        @submit.prevent="onSubmit"
-      >
-        <AuthInput
+      <form class="surface-card mt-8 space-y-5 p-6" @submit.prevent="onSubmit">
+        <TextInputFormField
           id="email"
-          v-model="form.email"
+          v-model="email"
           label="อีเมล"
           type="email"
           placeholder="you@example.com"
+          :error="errors.email"
         />
 
-        <AuthInput
+        <TextNumberInputFormField
           id="phone"
-          v-model="form.phone"
+          v-model="phone"
           label="เบอร์โทรศัพท์"
-          placeholder="08X-XXX-XXXX"
+          placeholder="0812345678"
+          :max-length="10"
+          :error="errors.phone"
         />
 
         <div class="grid gap-5 sm:grid-cols-2">
-          <AuthInput
+          <TextInputFormField
             id="password"
-            v-model="form.password"
+            v-model="password"
             label="รหัสผ่าน"
             type="password"
+            :error="errors.password"
           />
 
-          <AuthInput
+          <TextInputFormField
             id="confirm"
-            v-model="form.confirm"
+            v-model="confirmPassword"
             label="ยืนยันรหัสผ่าน"
             type="password"
+            :error="errors.confirmPassword"
           />
         </div>
 
-        <label
-          class="flex cursor-pointer items-start gap-3 rounded-lg bg-secondary/60 p-3 text-sm"
-        >
-          <input
-            v-model="agree"
-            type="checkbox"
-            class="mt-1 h-4 w-4 accent-primary"
-          />
+        <div>
+          <label
+            class="flex cursor-pointer items-start gap-3 rounded-lg bg-secondary/60 p-3 text-sm"
+          >
+            <input v-model="agree" type="checkbox" class="mt-1 h-4 w-4 accent-primary" />
 
-          <span class="text-muted-foreground">
-            ข้าพเจ้ายินยอมให้หน่วยงานตรวจสอบข้อมูลรายได้และทรัพย์สินเพื่อประกอบการพิจารณา
-          </span>
-        </label>
+            <span class="text-muted-foreground">
+              ข้าพเจ้ายินยอมให้หน่วยงานตรวจสอบข้อมูลรายได้และทรัพย์สินเพื่อประกอบการพิจารณา
+            </span>
+          </label>
 
-        <p
-          v-if="error"
-          class="text-sm text-destructive"
-        >
-          {{ error }}
-        </p>
-
-        <p
-          v-if="success"
-          class="text-sm text-success"
-        >
-          {{ success }}
-        </p>
+          <p v-if="errors.agree" class="mt-1 text-sm text-destructive">
+            {{ errors.agree }}
+          </p>
+        </div>
 
         <button
           type="submit"
@@ -138,10 +111,7 @@ const onSubmit = () => {
         <p class="text-center text-xs text-muted-foreground">
           มีบัญชีอยู่แล้ว?
 
-          <RouterLink
-            to="/login"
-            class="font-semibold text-accent hover:underline"
-          >
+          <RouterLink to="/login" class="font-semibold text-accent hover:underline">
             เข้าสู่ระบบ
           </RouterLink>
         </p>
