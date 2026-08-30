@@ -78,7 +78,7 @@ const submitApplication = async () => {
 
     await applicationService.create(payload)
 
-    await router.push('/status')
+    await router.replace('/')
   } catch (err: unknown) {
     error.value = getApiErrorMessage(err, 'ไม่สามารถยื่นคำขอได้')
   } finally {

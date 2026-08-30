@@ -47,13 +47,6 @@ const startRegistration = () => {
             เริ่มลงทะเบียน
             <ArrowRight class="size-4" />
           </button>
-
-          <RouterLink
-            to="/status"
-            class="inline-flex items-center rounded-lg border border-primary-foreground/30 px-5 py-3 text-sm font-semibold transition-colors hover:bg-primary-foreground/10"
-          >
-            ตรวจสอบสถานะคำขอ
-          </RouterLink>
         </div>
       </div>
     </section>

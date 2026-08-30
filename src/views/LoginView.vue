@@ -13,9 +13,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const form = reactive({
-  email: typeof route.query.email === 'string'
-    ? route.query.email
-    : '',
+  email: typeof route.query.email === 'string' ? route.query.email : '',
   password: '',
 })
 
@@ -40,12 +38,13 @@ const onSubmit = async () => {
 
     await authStore.fetchProfile()
 
-    await router.push('/')
+    if (authStore.user?.role === 'admin') {
+      await router.push('/admin')
+    } else {
+      await router.push('/')
+    }
   } catch (err: unknown) {
-    error.value = getApiErrorMessage(
-      err,
-      'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-    )
+    error.value = getApiErrorMessage(err, 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')
   } finally {
     loading.value = false
   }
@@ -53,14 +52,8 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <AuthCard
-    title="เข้าสู่ระบบ"
-    description="เข้าสู่ระบบเพื่อยื่นคำขอและติดตามสถานะการลงทะเบียน"
-  >
-    <form
-      class="space-y-5"
-      @submit.prevent="onSubmit"
-    >
+  <AuthCard title="เข้าสู่ระบบ" description="เข้าสู่ระบบเพื่อยื่นคำขอและติดตามสถานะการลงทะเบียน">
+    <form class="space-y-5" @submit.prevent="onSubmit">
       <TextInputFormField
         id="email"
         v-model="form.email"
@@ -78,18 +71,12 @@ const onSubmit = async () => {
       />
 
       <div class="flex justify-end">
-        <RouterLink
-          to="/forgot-password"
-          class="text-sm font-medium text-accent hover:underline"
-        >
+        <RouterLink to="/forgot-password" class="text-sm font-medium text-accent hover:underline">
           ลืมรหัสผ่าน?
         </RouterLink>
       </div>
 
-      <p
-        v-if="error"
-        class="text-sm text-destructive"
-      >
+      <p v-if="error" class="text-sm text-destructive">
         {{ error }}
       </p>
 
@@ -104,10 +91,7 @@ const onSubmit = async () => {
       <p class="text-center text-xs text-muted-foreground">
         ยังไม่มีบัญชี?
 
-        <RouterLink
-          to="/register"
-          class="font-semibold text-accent hover:underline"
-        >
+        <RouterLink to="/register" class="font-semibold text-accent hover:underline">
           สมัครสมาชิก
         </RouterLink>
       </p>

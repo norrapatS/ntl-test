@@ -75,3 +75,34 @@ export interface ICreateApplicationResponse {
     status: string
   }
 }
+export interface IApplication {
+  id: string
+  userId: string
+  transactionNo: string
+  nationalId: string
+  prefix: string
+  firstName: string
+  lastName: string
+  birthDate: string
+  gender: string
+  maritalStatus: string
+
+  houseNo: string
+  moo: string
+  road: string
+  subDistrict: string
+  district: string
+  province: string
+  zipcode: string
+
+  occupation: string
+  monthlyIncome: number
+  yearlyIncome: number
+  householdSize: number
+  debt: number
+  landOwned: string
+  email: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}

@@ -45,6 +45,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const logout = () => {
+    localStorage.removeItem('accessToken')
+
+    user.value = null
+    sessionExpired.value = false
+  }
+
   return {
     user,
     loading,
@@ -52,5 +59,6 @@ export const useAuthStore = defineStore('auth', () => {
     sessionExpired,
     fetchProfile,
     checkAuth,
+    logout
   }
 })

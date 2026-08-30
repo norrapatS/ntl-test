@@ -1,5 +1,5 @@
 import { api } from '@/libs/axios'
-import type { ICreateApplicationRequest, ICreateApplicationResponse } from '@/types/application.interface'
+import type { IApplication, ICreateApplicationRequest, ICreateApplicationResponse } from '@/types/application.interface'
 
 
 export const applicationService = {
@@ -12,5 +12,21 @@ export const applicationService = {
     )
 
     return response.data
+  },
+
+  async getAll(): Promise<IApplication[]> {
+    const response = await api.get<{ data: IApplication[] }>(
+      '/admin/applications',
+    )
+
+    return response.data.data
+  },
+
+  async getById(id: string): Promise<IApplication> {
+    const response = await api.get<{ data: IApplication }>(
+      `/admin/applications/${id}`,
+    )
+
+    return response.data.data
   },
 }
