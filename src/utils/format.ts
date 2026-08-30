@@ -19,3 +19,20 @@ export const formatCitizenId = (value: string): string => {
 
   return `${digits.slice(0, 1)}-${digits.slice(1, 5)}-${digits.slice(5, 10)}-${digits.slice(10, 12)}-${digits.slice(12)}`
 }
+
+
+export const formatMoney = (value: number) => {
+  return `${value.toLocaleString('th-TH')} บาท`
+}
+
+export const formatDate = (value: string) => {
+  if (!value) {
+    return '-'
+  }
+
+  return new Date(value).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}

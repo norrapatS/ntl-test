@@ -6,7 +6,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { applicationService } from '@/services/application.service'
 import { getApiErrorMessage } from '@/utils/error'
 import type { IApplication } from '@/types/application.interface'
-import { formatCitizenId } from '@/utils/format'
+import { formatCitizenId, formatDate, formatMoney } from '@/utils/format'
+import { getStatusClass, getStatusLabel } from '@/utils/admin'
 
 const route = useRoute()
 const router = useRouter()
@@ -21,59 +22,13 @@ const loadApplication = async () => {
   try {
     loading.value = true
 
-    application.value = await applicationService.getByTransactionNo(
-      route.params.transactionNo as string,
-    )
+    const transactionNo = route.params.transactionNo as string
+
+    application.value = await applicationService.getByTransactionNo(transactionNo)
   } catch (err: unknown) {
     error.value = getApiErrorMessage(err, 'ไม่สามารถโหลดข้อมูลคำขอได้')
   } finally {
     loading.value = false
-  }
-}
-
-const formatDate = (value: string) => {
-  if (!value) {
-    return '-'
-  }
-
-  return new Date(value).toLocaleDateString('th-TH', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-const formatMoney = (value: number) => {
-  return `${value.toLocaleString('th-TH')} บาท`
-}
-
-const getStatusLabel = (value: string) => {
-  switch (value) {
-    case 'draft':
-      return 'แบบร่าง'
-    case 'pending':
-      return 'รอตรวจสอบ'
-    case 'approved':
-      return 'อนุมัติ'
-    case 'rejected':
-      return 'ไม่อนุมัติ'
-    default:
-      return value
-  }
-}
-
-const getStatusClass = (value: string) => {
-  switch (value) {
-    case 'draft':
-      return 'bg-gray-100 text-gray-700'
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-700'
-    case 'approved':
-      return 'bg-green-100 text-green-700'
-    case 'rejected':
-      return 'bg-red-100 text-red-700'
-    default:
-      return 'bg-gray-100 text-gray-700'
   }
 }
 
@@ -96,11 +51,17 @@ onMounted(loadApplication)
         กลับรายการคำขอ
       </button>
 
-      <div v-if="loading" class="surface-card p-10 text-center text-sm text-muted-foreground">
+      <div
+        v-if="loading && !application"
+        class="surface-card p-10 text-center text-sm text-muted-foreground"
+      >
         กำลังโหลดข้อมูล...
       </div>
 
-      <div v-else-if="error" class="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
+      <div
+        v-else-if="error && !application"
+        class="rounded-lg bg-destructive/10 p-4 text-sm text-destructive"
+      >
         {{ error }}
       </div>
 
@@ -306,6 +267,7 @@ onMounted(loadApplication)
 
             <div>
               <p class="text-xs text-muted-foreground">ผู้ยื่นคำขอ</p>
+
               <p class="mt-1 font-medium">
                 {{ application.firstName }}
                 {{ application.lastName }}
@@ -314,20 +276,26 @@ onMounted(loadApplication)
           </div>
         </section>
 
-        <div v-if="application.status === 'pending'" class="mt-5 flex justify-end gap-3">
+        <p v-if="error" class="mt-5 rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
+          {{ error }}
+        </p>
+
+        <div v-if="application.status === 'pending'" class="mt-5 flex justify-center gap-3">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-700"
+            :disabled="loading"
+            class="inline-flex items-center gap-2 rounded-lg border border-primary bg-white px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-50"
+            @click="goBack"
           >
-            <XCircle class="size-4" />
             ไม่อนุมัติ
           </button>
 
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700"
+            :disabled="loading"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:text-primary-foreground/75 disabled:cursor-not-allowed disabled:opacity-50"
+            @click="goBack"
           >
-            <CheckCircle class="size-4" />
             อนุมัติ
           </button>
         </div>

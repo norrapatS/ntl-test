@@ -5,7 +5,8 @@ import { Eye, Search, RefreshCw } from 'lucide-vue-next'
 import { applicationService } from '@/services/application.service'
 import { getApiErrorMessage } from '@/utils/error'
 import type { IApplication } from '@/types/application.interface'
-import { formatCitizenId } from '@/utils/format'
+import { formatCitizenId, formatDate } from '@/utils/format'
+import { getStatusClass, getStatusLabel } from '@/utils/admin'
 
 const applications = ref<IApplication[]>([])
 const loading = ref(false)
@@ -41,56 +42,6 @@ const loadApplications = async () => {
     error.value = getApiErrorMessage(err, 'ไม่สามารถโหลดข้อมูลคำขอได้')
   } finally {
     loading.value = false
-  }
-}
-
-const formatDate = (value: string) => {
-  if (!value) {
-    return '-'
-  }
-
-  return new Date(value).toLocaleDateString('th-TH', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
-
-const getStatusLabel = (value: string) => {
-  switch (value) {
-    case 'draft':
-      return 'แบบร่าง'
-
-    case 'pending':
-      return 'รอตรวจสอบ'
-
-    case 'approved':
-      return 'อนุมัติ'
-
-    case 'rejected':
-      return 'ไม่อนุมัติ'
-
-    default:
-      return value
-  }
-}
-
-const getStatusClass = (value: string) => {
-  switch (value) {
-    case 'draft':
-      return 'bg-gray-100 text-gray-700'
-
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-700'
-
-    case 'approved':
-      return 'bg-green-100 text-green-700'
-
-    case 'rejected':
-      return 'bg-red-100 text-red-700'
-
-    default:
-      return 'bg-gray-100 text-gray-700'
   }
 }
 

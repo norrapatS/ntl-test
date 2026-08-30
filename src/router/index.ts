@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import { useAuthStore } from '@/stores/auth'
-import { UserRole } from '@/types/user.type'
+import { UserRole } from '@/types/user.enum'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
