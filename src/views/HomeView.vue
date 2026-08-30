@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import {
   ArrowRight,
   CheckCircle2,
@@ -10,6 +10,20 @@ import {
   Upload,
   Wallet,
 } from 'lucide-vue-next'
+
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+const startRegistration = () => {
+  if (authStore.user) {
+    router.push('/apply')
+    return
+  }
+
+  router.push('/login')
+}
 
 const steps = [
   {
@@ -62,7 +76,6 @@ const requirements = [
 
 <template>
   <div class="min-h-screen bg-background text-foreground">
-
     <section class="bg-primary text-primary-foreground">
       <div class="mx-auto max-w-5xl px-5 py-20">
         <span
@@ -89,13 +102,14 @@ const requirements = [
         </p>
 
         <div class="mt-9 flex flex-wrap gap-3">
-          <RouterLink
-            to="/register"
+          <button
+            type="button"
             class="inline-flex items-center gap-2 rounded-lg bg-primary-foreground px-5 py-3 text-sm font-semibold text-primary transition-transform hover:-translate-y-0.5"
+            @click="startRegistration"
           >
             เริ่มลงทะเบียน
             <ArrowRight class="size-4" />
-          </RouterLink>
+          </button>
 
           <RouterLink
             to="/status"

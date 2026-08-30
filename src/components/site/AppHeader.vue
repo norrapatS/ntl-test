@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -34,7 +37,16 @@ import { RouterLink } from 'vue-router'
           ตรวจสอบสถานะ
         </RouterLink>
 
+        <div
+          v-if="authStore.user"
+          class="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-foreground"
+        >
+          {{ authStore.user.firstName }}
+          {{ authStore.user.lastName }}
+        </div>
+
         <RouterLink
+          v-else
           to="/login"
           class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-navy-soft"
         >

@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
 import AppHeader from '@/components/site/AppHeader.vue'
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+
+onMounted(async () => {
+  await authStore.fetchProfile()
+})
 </script>
 
 <template>

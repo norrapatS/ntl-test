@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 
 import AuthCard from '@/components/auth/AuthCard.vue'
 import TextInputFormField from '@/components/TextInputFormField.vue'
+import { authService } from '@/services/auth.service'
+import { getApiErrorMessage } from '@/utils/error'
+import { useAuthStore } from '@/stores/auth'
 
+const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const form = reactive({
-  email: '',
+  email: typeof route.query.email === 'string'
+    ? route.query.email
+    : '',
   password: '',
 })
 
 const error = ref('')
+const loading = ref(false)
 
-const onSubmit = () => {
+const onSubmit = async () => {
   error.value = ''
 
   if (!form.email || !form.password) {
@@ -22,7 +30,25 @@ const onSubmit = () => {
     return
   }
 
-  router.push('/status')
+  try {
+    loading.value = true
+
+    await authService.login({
+      email: form.email,
+      password: form.password,
+    })
+
+    await authStore.fetchProfile()
+
+    await router.push('/')
+  } catch (err: unknown) {
+    error.value = getApiErrorMessage(
+      err,
+      'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+    )
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -69,9 +95,10 @@ const onSubmit = () => {
 
       <button
         type="submit"
-        class="w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-navy-soft"
+        :disabled="loading"
+        class="w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-navy-soft disabled:cursor-not-allowed disabled:opacity-50"
       >
-        เข้าสู่ระบบ
+        {{ loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ' }}
       </button>
 
       <p class="text-center text-xs text-muted-foreground">

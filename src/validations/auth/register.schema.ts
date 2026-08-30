@@ -2,6 +2,12 @@ import { z } from 'zod'
 
 export const registerSchema = z
   .object({
+    firstName: z
+      .string()
+      .min(1, 'กรุณากรอกชื่อ'),
+    lastName: z
+      .string()
+      .min(1, 'กรุณากรอกนามสกุล'),
     email: z
       .string()
       .min(1, 'กรุณากรอกอีเมล')

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
-import ApplicationReview from '@/components/application/ApplicationReview.vue'
+import ApplicationReview from './ApplicationReview.vue'
 import { useApplicationStore } from '@/stores/application'
 
 const props = defineProps<{
@@ -68,6 +68,7 @@ const thb = (value: string) => {
       @edit="props.onEdit?.(2)"
     />
 
+    <!-- Documents -->
     <ApplicationReview
       title="เอกสารแนบ"
       :rows="
@@ -81,9 +82,13 @@ const thb = (value: string) => {
       @edit="props.onEdit?.(3)"
     />
 
-    <p class="rounded-lg bg-secondary/60 p-4 text-xs text-muted-foreground">
-      ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ
-      หากตรวจพบว่าเป็นเท็จยินยอมให้ยกเลิกสิทธิ
-    </p>
+    <!-- Confirm -->
+    <div class="rounded-lg bg-secondary/60 p-4">
+      <p class="text-xs text-muted-foreground">
+        ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ
+        หากตรวจพบว่าเป็นเท็จยินยอมให้ยกเลิกสิทธิ
+      </p>
+    </div>
+
   </div>
 </template>
