@@ -22,7 +22,7 @@ export const applicationService = {
     return response.data.data
   },
 
-  async getById(id: string): Promise<IApplication> {
+  async getByTransactionNo(id: string): Promise<IApplication> {
     const response = await api.get<{ data: IApplication }>(
       `/admin/applications/${id}`,
     )

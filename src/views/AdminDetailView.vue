@@ -21,7 +21,9 @@ const loadApplication = async () => {
   try {
     loading.value = true
 
-    application.value = await applicationService.getById(route.params.id as string)
+    application.value = await applicationService.getByTransactionNo(
+      route.params.transactionNo as string,
+    )
   } catch (err: unknown) {
     error.value = getApiErrorMessage(err, 'ไม่สามารถโหลดข้อมูลคำขอได้')
   } finally {
