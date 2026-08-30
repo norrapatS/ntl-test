@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import { useAuthStore } from '@/stores/auth'
+import { UserRole } from '@/types/user.type'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,7 @@ const router = createRouter({
       component: () => import('@/views/ApplyView.vue'),
       meta: {
         requiresAuth: true,
+        role: UserRole.USER,
       },
     },
 
@@ -40,7 +42,7 @@ const router = createRouter({
       component: () => import('@/views/AdminView.vue'),
       meta: {
         requiresAuth: true,
-        role: 'admin',
+        role: UserRole.ADMIN,
       },
     },
 
@@ -50,7 +52,7 @@ const router = createRouter({
       component: () => import('@/views/AdminDetailView.vue'),
       meta: {
         requiresAuth: true,
-        role: 'admin',
+        role: UserRole.ADMIN,
       },
     },
 
