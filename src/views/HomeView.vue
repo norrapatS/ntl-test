@@ -1,15 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
-import {
-  ArrowRight,
-  CheckCircle2,
-  FileText,
-  MapPin,
-  Send,
-  ShieldCheck,
-  Upload,
-  Wallet,
-} from 'lucide-vue-next'
+import { ArrowRight, ShieldCheck } from 'lucide-vue-next'
+import { HOME_STEPS, REQUIREMENTS } from '@/utils/application'
 
 import { useAuthStore } from '@/stores/auth'
 
@@ -24,54 +16,6 @@ const startRegistration = () => {
 
   router.push('/login')
 }
-
-const steps = [
-  {
-    icon: FileText,
-    title: 'ข้อมูลส่วนตัว',
-    desc: 'เลขบัตรประชาชน ชื่อ-สกุล วันเกิด',
-  },
-  {
-    icon: MapPin,
-    title: 'ที่อยู่',
-    desc: 'ที่อยู่ตามทะเบียนบ้านปัจจุบัน',
-  },
-  {
-    icon: Wallet,
-    title: 'รายได้',
-    desc: 'อาชีพ รายได้ต่อเดือน/ปี หนี้สิน',
-  },
-  {
-    icon: Upload,
-    title: 'อัปโหลดเอกสาร',
-    desc: 'บัตรประชาชน ทะเบียนบ้าน หลักฐานรายได้',
-  },
-  {
-    icon: CheckCircle2,
-    title: 'ตรวจสอบข้อมูล',
-    desc: 'ทบทวนความถูกต้องก่อนยื่น',
-  },
-  {
-    icon: Send,
-    title: 'ยื่นคำขอ',
-    desc: 'รอเจ้าหน้าที่พิจารณาผล',
-  },
-]
-
-const requirements = [
-  {
-    label: 'รายได้ไม่เกิน',
-    value: '100,000 บาท/ปี',
-  },
-  {
-    label: 'อายุ',
-    value: '18 ปีบริบูรณ์ขึ้นไป',
-  },
-  {
-    label: 'ระยะเวลาพิจารณา',
-    value: 'ภายใน 30 วันทำการ',
-  },
-]
 </script>
 
 <template>
@@ -85,19 +29,12 @@ const requirements = [
           เปิดลงทะเบียนรอบปี 2569
         </span>
 
-        <h1
-          class="mt-6 max-w-2xl text-4xl font-bold leading-tight sm:text-5xl"
-        >
-          ลงทะเบียนบัตรสวัสดิการแห่งรัฐ
-          ทำได้เองจากที่บ้าน
+        <h1 class="mt-6 max-w-2xl text-4xl font-bold leading-tight sm:text-5xl">
+          ลงทะเบียนบัตรสวัสดิการแห่งรัฐ ทำได้เองจากที่บ้าน
         </h1>
 
-        <p
-          class="mt-4 max-w-xl text-base text-primary-foreground/75"
-        >
-          ยื่นคำขอออนไลน์ครบทุกขั้นตอน
-          ใช้เวลาประมาณ 10 นาที
-          ระบบจะบันทึกข้อมูลให้อัตโนมัติ
+        <p class="mt-4 max-w-xl text-base text-primary-foreground/75">
+          ยื่นคำขอออนไลน์ครบทุกขั้นตอน ใช้เวลาประมาณ 10 นาที ระบบจะบันทึกข้อมูลให้อัตโนมัติ
           และแจ้งผลการพิจารณาผ่านหน้าติดตามสถานะ
         </p>
 
@@ -122,28 +59,17 @@ const requirements = [
     </section>
 
     <section class="mx-auto max-w-5xl px-5 py-16">
-      <h2 class="text-2xl font-semibold">
-        ขั้นตอนการยื่นคำขอ
-      </h2>
+      <h2 class="text-2xl font-semibold">ขั้นตอนการยื่นคำขอ</h2>
 
-      <p class="mt-2 text-sm text-muted-foreground">
-        ทำตามลำดับ ระบบจะพาไปทีละหน้า
-      </p>
+      <p class="mt-2 text-sm text-muted-foreground">ทำตามลำดับ ระบบจะพาไปทีละหน้า</p>
 
       <ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <li
-          v-for="(step, index) in steps"
-          :key="step.title"
-          class="surface-card p-5"
-        >
+        <li v-for="(step, index) in HOME_STEPS" :key="step.title" class="surface-card p-5">
           <div class="flex items-center gap-3">
             <span
               class="grid size-10 place-items-center rounded-lg bg-secondary text-secondary-foreground"
             >
-              <component
-                :is="step.icon"
-                class="size-5"
-              />
+              <component :is="step.icon" class="size-5" />
             </span>
 
             <span class="text-xs font-semibold text-muted-foreground">
@@ -164,13 +90,8 @@ const requirements = [
 
     <section class="mx-auto max-w-5xl px-5 pb-20">
       <div class="surface-card grid gap-6 p-7 sm:grid-cols-3">
-        <div
-          v-for="item in requirements"
-          :key="item.label"
-        >
-          <p
-            class="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-          >
+        <div v-for="item in REQUIREMENTS" :key="item.label">
+          <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {{ item.label }}
           </p>
 

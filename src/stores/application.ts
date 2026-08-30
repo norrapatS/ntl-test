@@ -1,20 +1,21 @@
-// src/stores/application.ts
-
+import type { IPersonalData, IAddressData, IIncomeData, IDocumentData } from '@/types/application.interface'
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
+
+
 export const useApplicationStore = defineStore('application', () => {
-  const personal = reactive({
+  const personal = reactive<IPersonalData>({
     nationalId: '',
-    prefix: '',
+    prefix: 'นาย',
     firstName: '',
     lastName: '',
     birthDate: '',
-    gender: '',
-    maritalStatus: '',
+    gender: 'ชาย',
+    maritalStatus: 'โสด',
   })
 
-  const address = reactive({
+  const address = reactive<IAddressData>({
     houseNo: '',
     moo: '',
     road: '',
@@ -24,23 +25,16 @@ export const useApplicationStore = defineStore('application', () => {
     zipcode: '',
   })
 
-  const income = reactive({
+  const income = reactive<IIncomeData>({
     occupation: '',
     monthlyIncome: '',
     yearlyIncome: '',
     householdSize: '',
     debt: '',
-    landOwned: '',
+    landOwned: 'ไม่มี',
   })
 
-  const documents = reactive<
-    {
-      id: string
-      name: string
-      size: number
-      kind: string
-    }[]
-  >([])
+  const documents = reactive<IDocumentData[]>([])
 
   return {
     personal,

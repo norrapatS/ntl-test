@@ -7,7 +7,7 @@ const props = defineProps<{
   modelValue?: string
   error?: string
   maxLength?: number
-  numericOnly?: boolean // เพิ่ม prop รองรับ numeric-only
+  numericOnly?: boolean
 }>()
 
 const emit = defineEmits<{

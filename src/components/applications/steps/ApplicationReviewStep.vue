@@ -68,7 +68,6 @@ const thb = (value: string) => {
       @edit="props.onEdit?.(2)"
     />
 
-    <!-- Documents -->
     <ApplicationReview
       title="เอกสารแนบ"
       :rows="
@@ -82,7 +81,6 @@ const thb = (value: string) => {
       @edit="props.onEdit?.(3)"
     />
 
-    <!-- Confirm -->
     <div class="rounded-lg bg-secondary/60 p-4">
       <p class="text-xs text-muted-foreground">
         ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ
